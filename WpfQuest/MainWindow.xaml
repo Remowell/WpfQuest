@@ -1,0 +1,14 @@
+﻿<Window x:Class="WpfQuest.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfQuest"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid x:Name="myGrid">
+        <Button Content="(?__?)" FontSize="30" Margin="196,157" Click="Button_Click"/>
+        <Label x:Name="label" FontSize="30" Margin="320,309,321,48"/>
+        <Label Content="Level 1" FontSize="20" Margin="365,10,351,361" RenderTransformOrigin="0.571,-0.411"/>
+    </Grid>
+</Window>
