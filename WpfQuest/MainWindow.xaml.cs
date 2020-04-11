@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,6 +46,7 @@ namespace WpfQuest
             {
                 Timer.Stop();
                 MessageBox.Show("Next time");
+                Application.Current.Shutdown();
             }
         }
 
@@ -104,10 +106,12 @@ namespace WpfQuest
                     {
                         MessageBox.Show("Next level");
                     }
-                    else { MessageBox.Show("We need answer"); }
-                    break;
+                    else 
+                    {
+                        MessageBox.Show("Bye");
+                        Application.Current.Shutdown();
+                    }
                 }
-                break;
             }
             CreateLevelThree();
         }
@@ -115,6 +119,78 @@ namespace WpfQuest
         private void CreateLevelThree()
         {
             myGrid.Children.Clear();
+
+            Label labelLvl3 = new Label
+            {
+                Content = "Level 3",
+                FontSize = 20
+            };
+            labelLvl3.VerticalAlignment = VerticalAlignment.Top;
+            labelLvl3.HorizontalAlignment = HorizontalAlignment.Center;
+            myGrid.Children.Add(labelLvl3);
+
+            Label labelHelp2 = new Label();
+            labelHelp2.Content = "Choose the color you see HERE";
+            labelHelp2.VerticalAlignment = VerticalAlignment.Top;
+            myGrid.Children.Add(labelHelp2);
+
+            ComboBox comboBoxLvl3 = new ComboBox();
+            comboBoxLvl3.Margin = new Thickness(10, 60, 10, 300);
+            ObservableCollection<string> color = new ObservableCollection<string>();
+            color.Add("Green");
+            color.Add("Red");
+            color.Add("Yellow");
+            color.Add("Blue");
+            color.Add("Brown");
+            color.Add("Black");
+            color.Add("Gray");
+            color.Add("Pink");
+            color.Add("Purple");
+            color.Add("White");
+            comboBoxLvl3.ItemsSource = color;
+            myGrid.Children.Add(comboBoxLvl3);
+
+            Button buttonLvl3 = new Button
+            {
+                Content = "Enter your answer",
+                FontSize = 20
+            };
+            buttonLvl3.Click += ButtonLvl3_Click;
+            buttonLvl3.VerticalAlignment = VerticalAlignment.Bottom;
+            myGrid.Children.Add(buttonLvl3);
+        }
+
+        private void ButtonLvl3_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var item in myGrid.Children)
+            {
+                if (item is ComboBox comboBox)
+                {
+                    if(comboBox.SelectedItem is "Black")
+                    {
+                        MessageBox.Show("Good");
+                    }
+                    else 
+                    { 
+                        MessageBox.Show("We don't see this color");
+                        Application.Current.Shutdown();
+                    }
+                }
+            }
+            EndGame();
+        }
+
+        private void EndGame()
+        {
+            myGrid.Children.Clear();
+            Label labelEnd = new Label
+            {
+                Content = "Congratulations, you are the chosen one.",
+                FontSize = 30
+            };
+            labelEnd.VerticalAlignment = VerticalAlignment.Center;
+            labelEnd.HorizontalAlignment = HorizontalAlignment.Center;
+            myGrid.Children.Add(labelEnd);
         }
     }
 }
