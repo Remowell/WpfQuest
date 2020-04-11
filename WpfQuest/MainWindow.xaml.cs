@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -183,6 +184,11 @@ namespace WpfQuest
         private void EndGame()
         {
             myGrid.Children.Clear();
+
+            SoundPlayer sp = new SoundPlayer();
+            sp.Stream = Properties.Resources.Golden_Wind___Torture_Song_Theme;
+            sp.Play();
+
             Label labelEnd = new Label
             {
                 Content = "Congratulations, you are the chosen one.",
