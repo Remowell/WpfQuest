@@ -21,40 +21,104 @@ namespace WpfQuest
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
+    /// 
+
+    public enum Levels
+    {
+        Level1,
+        Level2,
+        Level3,
+        Level4,
+        Level5
+    }
+
     public partial class MainWindow : Window
     {
-        int time = 11;
-        int counter = 0;
-        private DispatcherTimer Timer;
+        public int levelNow;
+        public int time;
+        public int counter = 0;
+        public DispatcherTimer Timer;
         public int endurance;
         public int endurChar;
+        public int indentation;
+        public int score = 0;
 
         public MainWindow()
         {
             MessageBox.Show("You have only one attempt to answer at ANY level. Good luck");
             InitializeComponent();
+            CreateLevelOne();
+        }
+
+        private void CreateLevelOne()
+        {
+            myGrid.Children.Clear();
+
+            levelNow = 1;
+            Skip();
+            Label labelLvl1 = new Label
+            {
+                Content = "Level 1",
+                FontSize = 20,
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
+            myGrid.Children.Add(labelLvl1);
+
+            Button buttonLvl1 = new Button
+            {
+                Content = "(?___?)",
+                FontSize = 30,
+                Margin = new Thickness(196, 157, 196, 157)
+            };
+            buttonLvl1.Click += ButtonLvl1_Click;
+            myGrid.Children.Add(buttonLvl1);
+
+            ForTimer();
+        }
+
+        private void ForTimer()
+        {
+            time = 11;
             Timer = new DispatcherTimer();
             Timer.Interval = new TimeSpan(0, 0, 1);
-            Timer.Tick += Timer_Tick;
+            Timer.Tick += Timer_TickLvl1;
             Timer.Start();
+
+            Label labelTime = new Label
+            {
+                Name = "labelTime",
+                FontSize = 30,
+                Margin = new Thickness(321, 309, 321, 48)
+            };
+            myGrid.Children.Add(labelTime);
         }
 
-        private void Timer_Tick(object sender, EventArgs e)
+        private void Timer_TickLvl1(object sender, EventArgs e)
         {
-            if (time > 0)
+            foreach (var item in myGrid.Children)
             {
-                time--;
-                label.Content = string.Format("00:0{0}:0{1}", time / 60, time % 60);
-            }
-            else
-            {
-                Timer.Stop();
-                MessageBox.Show("Next time.");
-                Application.Current.Shutdown();
+                if (item is Label label)
+                {
+                    if (label.Name is "labelTime")
+                    {
+                        if (time > 0)
+                        {
+                            time--;
+                            label.Content = string.Format("00:0{0}:0{1}", time / 60, time % 60);
+                        }
+                        else
+                        {
+                            Timer.Stop();
+                            MessageBox.Show("Next time.");
+                            Application.Current.Shutdown();
+                        }
+                    }
+                }
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void ButtonLvl1_Click(object sender, RoutedEventArgs e)
         {
             counter++;
             if(counter == 15)
@@ -69,6 +133,9 @@ namespace WpfQuest
         {
             myGrid.Children.Clear();
 
+            levelNow = 2;
+            Skip();
+            Back();
             Label labelLvl2 = new Label
             {
                 Content = "Level 2",
@@ -97,7 +164,8 @@ namespace WpfQuest
             Label labelHelp = new Label()
             {
                 Content = "You should go { level3 }",
-                VerticalAlignment = VerticalAlignment.Top
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Left
             };
             myGrid.Children.Add(labelHelp);
         }
@@ -126,6 +194,9 @@ namespace WpfQuest
         {
             myGrid.Children.Clear();
 
+            levelNow = 3;
+            Skip();
+            Back();
             Label labelLvl3 = new Label
             {
                 Content = "Level 3",
@@ -138,10 +209,25 @@ namespace WpfQuest
             Label labelHelp2 = new Label()
             {
                 Content = "Choose the color you see HERE",
-                VerticalAlignment = VerticalAlignment.Top
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Left
             };
             myGrid.Children.Add(labelHelp2);
 
+            CreateComboBox();
+
+            Button buttonLvl3 = new Button
+            {
+                Content = "Enter your answer",
+                FontSize = 20,
+                VerticalAlignment = VerticalAlignment.Bottom
+            };
+            buttonLvl3.Click += ButtonLvl3_Click;
+            myGrid.Children.Add(buttonLvl3);
+        }
+
+        private void CreateComboBox()
+        {
             ComboBox comboBoxLvl3 = new ComboBox();
             comboBoxLvl3.Margin = new Thickness(10, 60, 10, 300);
             ObservableCollection<string> color = new ObservableCollection<string>();
@@ -157,15 +243,6 @@ namespace WpfQuest
             color.Add("White");
             comboBoxLvl3.ItemsSource = color;
             myGrid.Children.Add(comboBoxLvl3);
-
-            Button buttonLvl3 = new Button
-            {
-                Content = "Enter your answer",
-                FontSize = 20,
-                VerticalAlignment = VerticalAlignment.Bottom
-            };
-            buttonLvl3.Click += ButtonLvl3_Click;
-            myGrid.Children.Add(buttonLvl3);
         }
 
         private void ButtonLvl3_Click(object sender, RoutedEventArgs e)
@@ -192,6 +269,9 @@ namespace WpfQuest
         {
             myGrid.Children.Clear();
 
+            levelNow = 4;
+            Skip();
+            Back();
             Label labelLvl4 = new Label
             {
                 FontSize = 20,
@@ -207,7 +287,7 @@ namespace WpfQuest
             {
                 Content = "Dungeon is waiting",
                 FontSize = 20,
-                Margin = new Thickness(0, 200, 0, 0)
+                Margin = new Thickness(0, 220, 0, 0)
             };
             buttonDung.Click += ButtonDung_Click;
             myGrid.Children.Add(buttonDung);
@@ -226,7 +306,7 @@ namespace WpfQuest
             {
                 Content = "Warrior",
                 FontSize = 15,
-                HorizontalAlignment = HorizontalAlignment.Center
+                HorizontalAlignment = HorizontalAlignment.Left
             };
             stackPanelChar.Children.Add(radioButtonWarrior);
 
@@ -234,7 +314,7 @@ namespace WpfQuest
             {
                 Content = "Mage",
                 FontSize = 15,
-                HorizontalAlignment = HorizontalAlignment.Center
+                HorizontalAlignment = HorizontalAlignment.Left
             };
             stackPanelChar.Children.Add(radioButtonMag);
 
@@ -256,7 +336,7 @@ namespace WpfQuest
             {
                 Content = "Old key",
                 FontSize = 15,
-                HorizontalAlignment = HorizontalAlignment.Center
+                HorizontalAlignment = HorizontalAlignment.Left
             };
             stackPanelItems.Children.Add(keyBox);
 
@@ -264,7 +344,7 @@ namespace WpfQuest
             {
                 Content = "Dragon bones",
                 FontSize = 15,
-                HorizontalAlignment = HorizontalAlignment.Center
+                HorizontalAlignment = HorizontalAlignment.Left
             };
             stackPanelItems.Children.Add(boneBox);
 
@@ -272,7 +352,7 @@ namespace WpfQuest
             {
                 Content = "Strange map",
                 FontSize = 15,
-                HorizontalAlignment = HorizontalAlignment.Center
+                HorizontalAlignment = HorizontalAlignment.Left
             };
             stackPanelItems.Children.Add(mapBox);
 
@@ -280,7 +360,7 @@ namespace WpfQuest
             {
                 Content = "Magic rune",
                 FontSize = 15,
-                HorizontalAlignment = HorizontalAlignment.Center
+                HorizontalAlignment = HorizontalAlignment.Left
             };
             stackPanelItems.Children.Add(run);
            
@@ -305,7 +385,7 @@ namespace WpfQuest
             else 
             { 
                 MessageBox.Show("You defeated the ghost, found a way out of the dungeon and opened it. Next level");
-                EndGame();
+                CreateLevelFive();
             }
         }
 
@@ -401,6 +481,324 @@ namespace WpfQuest
                 {
                     if (checkBox.IsChecked is true) { endurChar += 25; }
                 }
+            }
+        }
+
+        private void CreateLevelFive()
+        {
+            myGrid.Children.Clear();
+
+            levelNow = 5;
+            Skip();
+            Back();
+            Label labelLvl5 = new Label
+            {
+                Content = "Level 5",
+                FontSize = 20,
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
+            myGrid.Children.Add(labelLvl5);
+
+            CreateListBox();
+            CreateListView();
+        }
+
+        private void CreateListBox()
+        {
+
+        }
+
+        private void CreateListView()
+        {
+
+        }
+
+        private void CreateLevelSix()
+        {
+            myGrid.Children.Clear();
+
+            levelNow = 6;
+            Skip();
+            Back();
+            Label labelLvl6 = new Label
+            {
+                Content = "Level 6",
+                FontSize = 20,
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
+            myGrid.Children.Add(labelLvl6);
+
+            CreateContextmenu();
+        }
+
+        private void CreateContextmenu()
+        {
+            ContextMenu contextMenu = new ContextMenu();
+            Label labelLvl6 = new Label
+            {
+                Margin = new Thickness(0, 70, 0, 0),
+                Content = "Use your mouse \nand select the movie \nthat help you.",
+                FontSize = 50,
+                HorizontalContentAlignment = HorizontalAlignment.Center
+            };
+            labelLvl6.ContextMenu = contextMenu;
+
+            ContextItem(contextMenu);
+
+            myGrid.Children.Add(labelLvl6);
+        }
+
+        private void ContextItem(ContextMenu contextMenu)
+        {
+            MenuItem groundhogItem = new MenuItem
+            {
+                Name = "Groundhog",
+                Header = "Groundhog Day"
+            };
+            groundhogItem.Click += Groundhog_Click;
+            contextMenu.Items.Add(groundhogItem);
+
+            MenuItem legendItem = new MenuItem
+            {
+                Name = "Legend",
+                Header = "I Am Legend"
+            };
+            legendItem.Click += Legend_Click;
+            contextMenu.Items.Add(legendItem);
+
+            MenuItem galaxyItem = new MenuItem
+            {
+                Name = "Galaxy",
+                Header = "The Hitchhiker's Guide to the Galaxy"
+            };
+            galaxyItem.Click += Galaxy_Click;
+            contextMenu.Items.Add(galaxyItem);
+        }
+
+        private void Galaxy_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("On the first try. Very well.");
+            CreateLevelSeven();
+        }
+
+        private void Legend_Click(object sender, RoutedEventArgs e)
+        {
+            myGrid.Children.Clear();
+            CreateMiniGame();
+        }
+
+        private void CreateMiniGame()
+        {
+            TextBlock blockScore = new TextBlock
+            {
+                Text = "Your score: " + score.ToString(),
+                FontSize = 20,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Top
+            };
+            myGrid.Children.Add(blockScore);
+
+            Label labelTimeTwo = new Label
+            {
+                Name = "labelTimeTwo",
+                FontSize = 30,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Bottom
+            };
+            myGrid.Children.Add(labelTimeTwo);
+
+            CreateButtons();
+            ForClock();
+        }
+
+        private void ForClock()
+        {
+            time = 11;
+            Timer = new DispatcherTimer();
+            Timer.Interval = new TimeSpan(0, 0, 1);
+            Timer.Tick += DoomsdayClock;
+            Timer.Start();
+        }
+
+        private void DoomsdayClock(object sender, EventArgs e)
+        {
+            foreach (var item in myGrid.Children)
+            {
+                if (item is Label label)
+                {
+                    if (label.Name is "labelTimeTwo")
+                    {
+                        if (time > 0)
+                        {
+                            time--;
+                            label.Content = string.Format("00:0{0}:0{1}", time / 60, time % 60);
+                        }
+                        else
+                        {
+                            Timer.Stop();
+                            MessageBox.Show("It's unlikely that you'll survive after the end.");
+                            Application.Current.Shutdown();
+                        }
+                    }
+                }
+            }
+
+        }
+
+        private void CreateButtons()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                Button buttonSurv = new Button
+                {
+                    Height = 5,
+                    Width = 5,
+                    Margin = new Thickness(5, 5, indentation, 5),
+                    ClickMode = ClickMode.Press
+                };
+                indentation += 10;
+                buttonSurv.Click += ButtonSurv_Click;
+
+                myGrid.Children.Add(buttonSurv);
+            }
+        }
+
+        private void ButtonSurv_Click(object sender, RoutedEventArgs e)
+        {
+            score += 100;
+            foreach (var item in myGrid.Children)
+            {
+                if (item is TextBlock textBlock)
+                {
+                    textBlock.Text = "Your score: " + score;
+                }
+                else if (item is Button button)
+                {
+                    if (button.IsPressed == true)
+                    {
+                        myGrid.Children.Remove(button);
+                        break;
+                    }
+                }
+            }
+
+            if (score == 1000)
+            {
+                Timer.Stop();
+                MessageBox.Show("You quickly assessed the situation and quickly made a decision. You survived.");
+                CreateLevelSeven();
+            }
+        }
+
+        private void Groundhog_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Time travel is a good thing");
+            Levels lvl = (Levels)(new Random().Next(0, 4));
+            switch (lvl)
+            {
+                case Levels.Level1:
+                    CreateLevelOne();
+                    break;
+                case Levels.Level2:
+                    CreateLevelTwo();
+                    break;
+                case Levels.Level3:
+                    CreateLevelThree();
+                    break;
+                case Levels.Level4:
+                    CreateLevelFour();
+                    break;
+                case Levels.Level5:
+                    CreateLevelFive();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void CreateLevelSeven()
+        {
+            myGrid.Children.Clear();
+            Skip();
+            Back();
+            levelNow = 7;
+            Label labelLvl7 = new Label
+            {
+                Content = "Level 7",
+                FontSize = 20,
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
+            myGrid.Children.Add(labelLvl7);
+        }
+
+        private void Skip()
+        {
+            Button skip = new Button
+            {
+                Content = "Skip level",
+                FontSize = 15,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Top
+            };
+            skip.Click += Skip_Click;
+            myGrid.Children.Add(skip);
+        }
+
+        private void Skip_Click(object sender, RoutedEventArgs e)
+        {
+            switch (levelNow)
+            {
+                case 1: CreateLevelTwo();
+                    break;
+                case 2: CreateLevelThree();
+                    break;
+                case 3: CreateLevelFour();
+                    break;
+                case 4: CreateLevelFive();
+                    break;
+                case 5: CreateLevelSix();
+                    break;
+                case 6: CreateLevelSeven();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void Back()
+        {
+            Button back = new Button
+            {
+                Content = "Back",
+                FontSize = 15,
+                Margin = new Thickness(600, 0, 100, 0),
+                VerticalAlignment = VerticalAlignment.Top
+            };
+            back.Click += Back_Click;
+            myGrid.Children.Add(back);
+        }
+
+        private void Back_Click(object sender, RoutedEventArgs e)
+        {
+            switch (levelNow)
+            {
+                case 2: CreateLevelOne();
+                    break;
+                case 3: CreateLevelTwo();
+                    break;
+                case 4: CreateLevelThree();
+                    break;
+                case 5: CreateLevelFour();
+                    break;
+                case 6: CreateLevelFive();
+                    break;
+                case 7: CreateLevelSix();
+                    break;
+                default:
+                    break;
             }
         }
 
