@@ -34,6 +34,12 @@ namespace WpfQuest
 
     public partial class MainWindow : Window
     {
+        public class Images
+        {
+            public string ImagePath { get; set; }
+            public string Letter { get; set; }
+        }
+
         public int levelNow;
         public int time;
         public int counter = 0;
@@ -42,6 +48,8 @@ namespace WpfQuest
         public int endurChar;
         public int indentation;
         public int score = 0;
+
+        SoundPlayer sp = new SoundPlayer();
 
         public MainWindow()
         {
@@ -89,7 +97,7 @@ namespace WpfQuest
             {
                 Name = "labelTime",
                 FontSize = 30,
-                Margin = new Thickness(321, 309, 321, 48)
+                VerticalAlignment = VerticalAlignment.Bottom
             };
             myGrid.Children.Add(labelTime);
         }
@@ -383,7 +391,8 @@ namespace WpfQuest
                 Application.Current.Shutdown(); 
             }
             else 
-            { 
+            {
+                endurChar = 0;
                 MessageBox.Show("You defeated the ghost, found a way out of the dungeon and opened it. Next level");
                 CreateLevelFive();
             }
@@ -502,16 +511,250 @@ namespace WpfQuest
 
             CreateListBox();
             CreateListView();
+            StopMusic();
+
+            Button choseAnsButt = new Button
+            {
+                Content = "Choose answer",
+                FontSize = 20,
+                VerticalAlignment = VerticalAlignment.Bottom,
+                HorizontalAlignment = HorizontalAlignment.Right
+            };
+            choseAnsButt.Click += ChoseAnsButt_Click;
+            myGrid.Children.Add(choseAnsButt);
         }
 
         private void CreateListBox()
         {
+            int numOfButton = 1;
+            string flag = "Bers";
+            ListBox listBox = new ListBox
+            {
+                Width = 400,
+                Margin = new Thickness(0, 60, 0, 40),
+                HorizontalAlignment = HorizontalAlignment.Left
+            };
+            myGrid.Children.Add(listBox);
 
+            CreatePlayButton(listBox, numOfButton, flag);
+
+            numOfButton++;
+            flag = "Clint";
+            CreatePlayButton(listBox, numOfButton, flag);
+
+            numOfButton++;
+            flag = "Knight";
+            CreatePlayButton(listBox, numOfButton, flag);
+        }
+
+        private void CreatePlayButton(ListBox listBox, int num, string flag)
+        {
+            StackPanel stackPanel = new StackPanel();
+            stackPanel.Orientation = Orientation.Horizontal;
+
+            Label labelClB = new Label
+            {
+                Content = num,
+                FontSize = 20
+            };
+            stackPanel.Children.Add(labelClB);
+
+            Button play = new Button
+            {
+                Height = 50,
+                Width = 50,
+                Content = "Play"
+            };
+            stackPanel.Children.Add(play);
+            listBox.Items.Add(stackPanel);
+
+            switch (flag)
+            {
+                case "Bers":
+                    play.Click += PlayBers_Click;
+                    break;
+                case "Clint":
+                    play.Click += PlayClint_Click;
+                    break;
+                case "Knight":
+                    play.Click += PlayKnight_Click;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void PlayClint_Click(object sender, RoutedEventArgs e)
+        {
+            sp.Stop();
+            sp.Stream = Properties.Resources.Ennio_Morricone___A_Fistful_Of_Dollars;
+            sp.Play();
+        }
+
+        private void PlayBers_Click(object sender, RoutedEventArgs e)
+        {
+            sp.Stop();
+            sp.Stream = Properties.Resources.Susumu_Hirasawa___Forces;
+            sp.Play();
+        }
+
+        private void PlayKnight_Click(object sender, RoutedEventArgs e)
+        {
+            sp.Stop();
+            sp.Stream = Properties.Resources.KOTOR___The_Sith;
+            sp.Play();
         }
 
         private void CreateListView()
         {
+            var factory = new FrameworkElementFactory(typeof(Image));
+            factory.SetValue(Image.SourceProperty, new Binding(nameof(Images.ImagePath)));
+            factory.SetValue(Image.WidthProperty, 250.0);
+            factory.SetValue(Image.HeightProperty, 100.0);
+            var dataTemplate = new DataTemplate { VisualTree = factory };
 
+            ListView listView = new ListView
+            {
+                Width = 400,
+                Margin = new Thickness(0, 60, 0, 40),
+                HorizontalAlignment = HorizontalAlignment.Right
+            };
+            myGrid.Children.Add(listView);
+
+            GridView gridView = new GridView();
+            listView.View = gridView;
+
+            gridView.Columns.Add(new GridViewColumn { Header = "Image", CellTemplate = dataTemplate });
+            gridView.Columns.Add(new GridViewColumn { Header = "Letter", DisplayMemberBinding = new Binding(nameof(Images.Letter)), Width = 150 });
+
+            var ImageList = new List<Images>
+            {
+                new Images { ImagePath = "A Fistful Of Dollars.jpeg", Letter = "A" },
+                new Images { ImagePath = "OLd Republic.png", Letter = "B"},
+                new Images { ImagePath = "Berserk.jpg", Letter = "C" }
+            };
+            listView.ItemsSource = ImageList;
+        }
+
+        private void StopMusic()
+        {
+            Button stopMus = new Button
+            {
+                Content = "Stop music",
+                FontSize = 20,
+                VerticalAlignment = VerticalAlignment.Bottom,
+                HorizontalAlignment = HorizontalAlignment.Left
+            };
+            stopMus.Click += StopMus_Click;
+            myGrid.Children.Add(stopMus);
+        }
+
+        private void StopMus_Click(object sender, RoutedEventArgs e)
+        {
+            sp.Stop();
+        }
+
+        private void ChoseAnsButt_Click(object sender, RoutedEventArgs e)
+        {
+            sp.Stop();
+            CreateNextStepLvl5();
+        }
+
+        private void CreateNextStepLvl5()
+        {
+            myGrid.Children.Clear();
+
+            GroupBox groupBoxAns = new GroupBox
+            {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Header = "Answers"
+            };
+            myGrid.Children.Add(groupBoxAns);
+
+            Button buttonCheck = new Button
+            {
+                Content = "Check",
+                FontSize = 20,
+                VerticalAlignment = VerticalAlignment.Bottom
+            };
+            buttonCheck.Click += ButtonCheck_Click;
+            myGrid.Children.Add(buttonCheck);
+
+            CreateRadButAns(groupBoxAns);
+        }
+
+        private void CreateRadButAns(GroupBox groupBoxAns)
+        {
+            StackPanel panelAns = new StackPanel();
+
+            RadioButton radButTrue = new RadioButton
+            {
+                Content = "1C 2A 3B",
+                FontSize = 20
+            };
+            panelAns.Children.Add(radButTrue);
+
+            RadioButton radButNotTrue = new RadioButton
+            {
+                Content = "1B 2C 3A",
+                FontSize = 20
+            };
+            panelAns.Children.Add(radButNotTrue);
+
+            RadioButton radButFalse = new RadioButton
+            {
+                Content = "1A 2C 3B",
+                FontSize = 20
+            };
+            panelAns.Children.Add(radButFalse);
+
+            groupBoxAns.Content = panelAns;
+        }
+
+        private void ButtonCheck_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var item in myGrid.Children)
+            {
+                if (item is GroupBox box)
+                {
+                    StackWithAnswers(box);
+                }
+            }
+            CreateLevelSix();
+        }
+
+        private void StackWithAnswers(GroupBox box)
+        {
+            if (box.Content is StackPanel panel)
+            {
+                foreach (var element in panel.Children)
+                {
+                    if (element is RadioButton button)
+                    {
+                        IfItIsTrue(button);
+                    }
+                }
+            }
+        }
+
+        private void IfItIsTrue(RadioButton trueButton)
+        {
+            if (trueButton.Content is "1C 2A 3B")
+            {
+                switch (trueButton.IsChecked)
+                {
+                    case true:
+                        MessageBox.Show("Well, you know enough to join the fraternity. Continue");
+                        break;
+                    case false:
+                        MessageBox.Show("This is a classic. You need to know this");
+                        Application.Current.Shutdown();
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
         private void CreateLevelSix()
@@ -577,6 +820,32 @@ namespace WpfQuest
             contextMenu.Items.Add(galaxyItem);
         }
 
+        private void Groundhog_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Time travel is a good thing");
+            Levels lvl = (Levels)(new Random().Next(0, 4));
+            switch (lvl)
+            {
+                case Levels.Level1:
+                    CreateLevelOne();
+                    break;
+                case Levels.Level2:
+                    CreateLevelTwo();
+                    break;
+                case Levels.Level3:
+                    CreateLevelThree();
+                    break;
+                case Levels.Level4:
+                    CreateLevelFour();
+                    break;
+                case Levels.Level5:
+                    CreateLevelFive();
+                    break;
+                default:
+                    break;
+            }
+        }
+
         private void Galaxy_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("On the first try. Very well.");
@@ -611,40 +880,6 @@ namespace WpfQuest
 
             CreateButtons();
             ForClock();
-        }
-
-        private void ForClock()
-        {
-            time = 11;
-            Timer = new DispatcherTimer();
-            Timer.Interval = new TimeSpan(0, 0, 1);
-            Timer.Tick += DoomsdayClock;
-            Timer.Start();
-        }
-
-        private void DoomsdayClock(object sender, EventArgs e)
-        {
-            foreach (var item in myGrid.Children)
-            {
-                if (item is Label label)
-                {
-                    if (label.Name is "labelTimeTwo")
-                    {
-                        if (time > 0)
-                        {
-                            time--;
-                            label.Content = string.Format("00:0{0}:0{1}", time / 60, time % 60);
-                        }
-                        else
-                        {
-                            Timer.Stop();
-                            MessageBox.Show("It's unlikely that you'll survive after the end.");
-                            Application.Current.Shutdown();
-                        }
-                    }
-                }
-            }
-
         }
 
         private void CreateButtons()
@@ -692,30 +927,38 @@ namespace WpfQuest
             }
         }
 
-        private void Groundhog_Click(object sender, RoutedEventArgs e)
+        private void ForClock()
         {
-            MessageBox.Show("Time travel is a good thing");
-            Levels lvl = (Levels)(new Random().Next(0, 4));
-            switch (lvl)
+            time = 11;
+            Timer = new DispatcherTimer();
+            Timer.Interval = new TimeSpan(0, 0, 1);
+            Timer.Tick += DoomsdayClock;
+            Timer.Start();
+        }
+
+        private void DoomsdayClock(object sender, EventArgs e)
+        {
+            foreach (var item in myGrid.Children)
             {
-                case Levels.Level1:
-                    CreateLevelOne();
-                    break;
-                case Levels.Level2:
-                    CreateLevelTwo();
-                    break;
-                case Levels.Level3:
-                    CreateLevelThree();
-                    break;
-                case Levels.Level4:
-                    CreateLevelFour();
-                    break;
-                case Levels.Level5:
-                    CreateLevelFive();
-                    break;
-                default:
-                    break;
+                if (item is Label label)
+                {
+                    if (label.Name is "labelTimeTwo")
+                    {
+                        if (time > 0)
+                        {
+                            time--;
+                            label.Content = string.Format("00:0{0}:0{1}", time / 60, time % 60);
+                        }
+                        else
+                        {
+                            Timer.Stop();
+                            MessageBox.Show("It's unlikely that you'll survive after the end.");
+                            Application.Current.Shutdown();
+                        }
+                    }
+                }
             }
+
         }
 
         private void CreateLevelSeven()
@@ -774,8 +1017,9 @@ namespace WpfQuest
             {
                 Content = "Back",
                 FontSize = 15,
-                Margin = new Thickness(600, 0, 100, 0),
-                VerticalAlignment = VerticalAlignment.Top
+                Margin = new Thickness(0, 0, 0, 30),
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Right
             };
             back.Click += Back_Click;
             myGrid.Children.Add(back);
@@ -806,7 +1050,6 @@ namespace WpfQuest
         {
             myGrid.Children.Clear();
 
-            SoundPlayer sp = new SoundPlayer();
             sp.Stream = Properties.Resources.Golden_Wind___Torture_Song_Theme;
             sp.Play();
 

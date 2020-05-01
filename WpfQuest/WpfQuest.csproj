@@ -37,6 +37,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -96,6 +97,27 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Golden Wind - Torture Song Theme.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Susumu Hirasawa - Forces.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Berserk.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Без названия.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Play.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ennio Morricone - A Fistful Of Dollars.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\KOTOR - The Sith.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
