@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Media;
 using System.Text;
@@ -29,7 +30,8 @@ namespace WpfQuest
         Level2,
         Level3,
         Level4,
-        Level5
+        Level5,
+        Level6
     }
 
     public partial class MainWindow : Window
@@ -75,7 +77,7 @@ namespace WpfQuest
 
             Button buttonLvl1 = new Button
             {
-                Content = "(?___?)",
+                Content = "(?__?)",
                 FontSize = 30,
                 Margin = new Thickness(196, 157, 196, 157)
             };
@@ -823,23 +825,20 @@ namespace WpfQuest
         private void Groundhog_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Time travel is a good thing");
-            Levels lvl = (Levels)(new Random().Next(0, 4));
+            Levels lvl = (Levels)(new Random().Next(0, 5));
             switch (lvl)
             {
-                case Levels.Level1:
-                    CreateLevelOne();
+                case Levels.Level1: CreateLevelOne();
                     break;
-                case Levels.Level2:
-                    CreateLevelTwo();
+                case Levels.Level2: CreateLevelTwo();
                     break;
-                case Levels.Level3:
-                    CreateLevelThree();
+                case Levels.Level3: CreateLevelThree();
                     break;
-                case Levels.Level4:
-                    CreateLevelFour();
+                case Levels.Level4: CreateLevelFour();
                     break;
-                case Levels.Level5:
-                    CreateLevelFive();
+                case Levels.Level5: CreateLevelFive();
+                    break;
+                case Levels.Level6: CreateLevelSix();
                     break;
                 default:
                     break;
@@ -975,6 +974,149 @@ namespace WpfQuest
                 HorizontalAlignment = HorizontalAlignment.Center
             };
             myGrid.Children.Add(labelLvl7);
+
+            Label labelHelpLvl7 = new Label
+            {
+                Content = "The good do nothing, the bad destroy, \nthe neutrals gloat, and the old friend \nwill help get out",
+                FontSize = 15,
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Left
+            };
+            myGrid.Children.Add(labelHelpLvl7);
+
+            TreeView trw = new TreeView
+            { 
+                Margin = new Thickness(0, 70, 0, 0)
+            };
+            myGrid.Children.Add(trw);
+
+            TreeViewItem trwGood = new TreeViewItem
+            {
+                Header = "(.❛ ᴗ ❛.)",
+                FontSize = 20
+            };
+            trw.Items.Add(trwGood);
+
+            CreateFirstBranch(trwGood);
+            CreateSecondBranch(trwGood);
+            CreateThirdBranch(trwGood);
+        }
+
+        private void CreateFirstBranch(TreeViewItem treeView)
+        {
+            Button buttonAngry = new Button
+            {
+                Content = "୧((#Φ益Φ#))୨",
+                FontSize = 20
+            };
+            buttonAngry.Click += Angry_Click;
+            treeView.Items.Add(buttonAngry);
+
+            Button buttonNet = new Button
+            {
+                Content = "┐(‘～` )┌",
+                FontSize = 20
+            };
+            buttonNet.Click += Groundhog_Click;
+            treeView.Items.Add(buttonNet);
+
+            TreeViewItem trwGood = new TreeViewItem
+            {
+                Header = "(◕‿ ◕)",
+                FontSize = 20
+            };
+            treeView.Items.Add(trwGood);
+
+            CreateSecondBranch(trwGood);
+        }
+
+        private void CreateSecondBranch(TreeViewItem treeView)
+        {
+            TreeViewItem trwGood = new TreeViewItem
+            {
+                Header = "(´｡• ᵕ •｡`)",
+                FontSize = 20
+            };
+            treeView.Items.Add(trwGood);
+
+            Button buttonAngry = new Button
+            {
+                Content = "	٩(ఠ益ఠ)۶",
+                FontSize = 20
+            };
+            buttonAngry.Click += Angry_Click;
+            treeView.Items.Add(buttonAngry);
+
+            Button buttonAngry2 = new Button
+            {
+                Content = "(ఠఠ益ఠఠ)",
+                FontSize = 20
+            };
+            buttonAngry.Click += Angry_Click;
+            treeView.Items.Add(buttonAngry2);
+
+            Button buttonNet = new Button
+            {
+                Content = "┐(￣～￣)┌",
+                FontSize = 20
+            };
+            buttonNet.Click += Groundhog_Click;
+            treeView.Items.Add(buttonNet);
+
+            CreateThirdBranch(trwGood);
+        }
+
+        private void CreateThirdBranch(TreeViewItem treeView)
+        {
+            Button buttonAngry = new Button
+            {
+                Content = "↑_(ΦwΦ)Ψ",
+                FontSize = 20
+            };
+            buttonAngry.Click += Angry_Click;
+            treeView.Items.Add(buttonAngry);
+
+            Button buttonWho = new Button
+            {
+                Content = "(?__?)",
+                FontSize = 20
+            };
+            buttonWho.Click += ButtonWho_Click; 
+            treeView.Items.Add(buttonWho);
+
+            TreeViewItem trwGood = new TreeViewItem
+            {
+                Header = "	°˖✧◝(⁰▿⁰)◜✧˖°",
+                FontSize = 20
+            };
+            treeView.Items.Add(trwGood);
+        }
+
+        private void ButtonWho_Click(object sender, RoutedEventArgs e)
+        {
+            CreateLevelEight();
+        }
+
+        private void Angry_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Oh this guy looks ang..");
+            Application.Current.Shutdown();
+        }
+
+        private void CreateLevelEight()
+        {
+            myGrid.Children.Clear();
+            Skip();
+            Back();
+            levelNow = 8;
+            Label labelLvl8 = new Label
+            {
+                Content = "Level 8",
+                FontSize = 20,
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Center
+            };
+            myGrid.Children.Add(labelLvl8);
         }
 
         private void Skip()
@@ -1005,6 +1147,10 @@ namespace WpfQuest
                 case 5: CreateLevelSix();
                     break;
                 case 6: CreateLevelSeven();
+                    break;
+                case 7: CreateLevelEight();
+                    break;
+                case 8: EndGame();
                     break;
                 default:
                     break;
@@ -1040,6 +1186,8 @@ namespace WpfQuest
                 case 6: CreateLevelFive();
                     break;
                 case 7: CreateLevelSix();
+                    break;
+                case 8: CreateLevelSeven();
                     break;
                 default:
                     break;
