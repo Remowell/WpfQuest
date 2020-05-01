@@ -133,6 +133,7 @@ namespace WpfQuest
             counter++;
             if(counter == 15)
             {
+                counter = 0;
                 Timer.Stop();
                 MessageBox.Show("Next level");
                 CreateLevelTwo();
@@ -920,6 +921,8 @@ namespace WpfQuest
 
             if (score == 1000)
             {
+                score = 0;
+                indentation = 0;
                 Timer.Stop();
                 MessageBox.Show("You quickly assessed the situation and quickly made a decision. You survived.");
                 CreateLevelSeven();
